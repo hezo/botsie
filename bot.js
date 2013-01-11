@@ -39,10 +39,10 @@ var bot = new irc.Client(config.server, config.botName, {
 bot.addListener("join", function(channel, who) {
 	// Welcome them in!
 	if (who == "hezo") {
-		bot.say(channel, who + ": my master!");
+		bot.say(channel, who + " ooh its me clown!");
 	}
 	if (who == "Quh") {
-		bot.say(channel, who + " ooh its me clown!");
+		bot.say(channel, who + ": my master!");
 	}
 });
 

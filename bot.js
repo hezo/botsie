@@ -54,26 +54,27 @@ bot.addListener('error', function(message) {
 
 bot.addListener('message', function(from, to, message) {
 
-	if (message.substring(0, 1) === "!") {
-		splitted = message.split(" ");
-		switch(splitted[0]) {
-			case "!yarr":
-				bot.say(to, "http://meri.rosvot.org");
-				break;
-			case "!dota":
-				getDotaStats(splitted[1]);
-				break;
-			case "!wot":
-				getWotStats(splitted[1], to);
-			break;
+    if (message.substring(0, 1) !== "!") {
+    } else {
+        splitted = message.split(" ");
+        switch (splitted[0]) {
+            case "!yarr":
+                bot.say(to, "http://meri.rosvot.org");
+                break;
+            case "!dota":
+                botmodules.dota.dota(splitted[1], to, bot);
+                break;
+            case "!wot":
+                botmodules.wot.wot(splitted[1], to, bot);
+                break;
             case "!test":
                 botmodules.botsample.hello(to, bot);
                 break;
-			default:
-				console.log(from + ' => ' + to + ': ' + message);
-				break;
-		}
-	}
+            default:
+                console.log(from + ' => ' + to + ': ' + message);
+                break;
+        }
+    }
 
 });
 

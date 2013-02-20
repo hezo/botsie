@@ -1,6 +1,6 @@
 var request = require("request");
 
-exports.getWotStats = function(playerName, to, bot) {
+exports.wot = function(playerName, to, bot) {
     try {
         request('http://worldoftanks.eu/community/accounts/api/1.1/?source_token=WG-WoT_Assistant-1.2.2&search='+playerName+'&offset=0&limit=1', function(error, response, body) {
             if (!error && response.statusCode == 200) {
@@ -37,4 +37,4 @@ exports.getWotStats = function(playerName, to, bot) {
         console.log(err);
         bot.say(to, "Error Error ;)");
     }
-}
+};

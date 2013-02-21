@@ -72,7 +72,9 @@ bot.addListener('message', function(from, to, message) {
     {
         splitted = message.split(" ");
         askedmodule = splitted[0].substring(1);
-        modules[askedmodule].modexec(to, bot, splitted[0]);
+        modargs = message.substring(askedmodule.length+1);
+
+        modules[askedmodule].modexec(to, bot, modargs);
     }
 
 });

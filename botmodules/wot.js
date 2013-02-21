@@ -1,6 +1,6 @@
 var request = require("request");
 
-exports.wot = function(playerName, to, bot) {
+exports.modexec = function(to, bot, playerName) {
     try {
         request('http://worldoftanks.eu/community/accounts/api/1.1/?source_token=WG-WoT_Assistant-1.2.2&search='+playerName+'&offset=0&limit=1', function(error, response, body) {
             if (!error && response.statusCode == 200) {

@@ -1,3 +1,3 @@
-exports.hello = function(to, bot){
-    bot.say(to, "Error Error ;)");
+exports.modexec = function(to, bot, modargs){
+    bot.say(to, "Error Error: " + modargs );
 };

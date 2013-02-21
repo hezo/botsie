@@ -1,5 +1,5 @@
 var request = require("request");
 
-exports.dota =  function(player, to, bot) {
-    bot.say(to, "Error Error ;)");
+exports.modexec =  function(to, bot,playerName) {
+    bot.say(to, "Error Error. "+playerName);
 };

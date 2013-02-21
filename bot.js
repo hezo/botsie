@@ -1,7 +1,7 @@
 console.log("Piraatti :: Start");
 var irc = require("irc");
 var request = require('request');
-var botmodules = require('./botmodules');
+
 /*
  * Only some of these config are used...
  */
@@ -52,28 +52,27 @@ bot.addListener('error', function(message) {
 	console.log('error: ', message);
 });
 
+//Load dem modules.
+var fs = require("fs");
+var path = require('path');
+
+var modules = {};
+console.log("Modules loaded:");
+fs.readdirSync("./botmodules").forEach(function(filename) {
+    if(filename != 'index.js' && path.extname(filename) == ".js")
+    {
+        modules[path.basename(filename, ".js")] = require("./botmodules/"+filename);
+        console.log(filename +" : "+ path.basename(filename, ".js"));
+    }
+});
+
 bot.addListener('message', function(from, to, message) {
 
-    if (message.substring(0, 1) !== "!") {
-    } else {
+    if (message.substring(0, 1) == "!")
+    {
         splitted = message.split(" ");
-        switch (splitted[0]) {
-            case "!yarr":
-                bot.say(to, "http://meri.rosvot.org");
-                break;
-            case "!dota":
-                botmodules.dota.dota(splitted[1], to, bot);
-                break;
-            case "!wot":
-                botmodules.wot.wot(splitted[1], to, bot);
-                break;
-            case "!test":
-                botmodules.botsample.hello(to, bot);
-                break;
-            default:
-                console.log(from + ' => ' + to + ': ' + message);
-                break;
-        }
+        askedmodule = splitted[0].substring(1);
+        modules[askedmodule].modexec(to, bot, splitted[0]);
     }
 
 });

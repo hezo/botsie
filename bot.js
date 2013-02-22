@@ -8,7 +8,7 @@ var request = require('request');
 var config = {
 	channels : ["#quhbottest"],
 	server : "irc.quakenet.org",
-	botName : "SexRowBot",
+	botName : "TESTIBOTTI V2 ROCKET",
 	userName : 'nodebot',
 	realName : 'nodeJS IRC client',
 	port : 6667,
@@ -73,8 +73,8 @@ bot.addListener('message', function(from, to, message) {
         splitted = message.split(" ");
         askedmodule = splitted[0].substring(1);
         modargs = message.substring(askedmodule.length+1);
-
-        modules[askedmodule].modexec(to, bot, modargs);
+        if(typeof modules[askedmodule] !== "undefined")
+       		modules[askedmodule].modexec(to, bot, modargs);
     }
 
 });

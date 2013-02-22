@@ -70,7 +70,7 @@ bot.addListener('message', function(from, to, message) {
     if (message.substring(0, 1) == "!") {
         splitted = message.split(" ");
         askedmodule = splitted[0].substring(1);
-        modargs = message.substring(askedmodule.length+1);
+        modargs = message.substring(askedmodule.length+2);
         if(typeof modules[askedmodule] !== "undefined")
        		modules[askedmodule].modexec(to, bot, modargs);
     }

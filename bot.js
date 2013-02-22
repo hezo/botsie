@@ -12,7 +12,7 @@ var config = {
 	userName : 'nodebot',
 	realName : 'nodeJS IRC client',
 	port : 6667,
-	debug : false,
+	debug : true,
 	showErrors : false,
 	autoRejoin : true,
 	autoConnect : true,
@@ -67,18 +67,17 @@ fs.readdirSync("./botmodules").forEach(function(filename) {
 });
 
 bot.addListener('message', function(from, to, message) {
-
-    if (message.substring(0, 1) == "!")
-    {
+    if (message.substring(0, 1) == "!") {
         splitted = message.split(" ");
         askedmodule = splitted[0].substring(1);
         modargs = message.substring(askedmodule.length+1);
         if(typeof modules[askedmodule] !== "undefined")
        		modules[askedmodule].modexec(to, bot, modargs);
     }
-
 });
+
 //do some error handling magic here!
+//and this is bad place to be
 process.on('uncaughtException', function(err) {
 	console.log(err);
 });

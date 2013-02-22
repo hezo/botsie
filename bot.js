@@ -78,4 +78,7 @@ bot.addListener('message', function(from, to, message) {
     }
 
 });
-
+//do some error handling magic here!
+process.on('uncaughtException', function(err) {
+	console.log(err);
+});

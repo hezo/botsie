@@ -10,7 +10,7 @@ exports.modexec = function (to, bot, modargs) {
 function getTags(tagholder, to, bot) {
     db.serialize(function () {
         var stmt = db.prepare("SELECT tag FROM tags WHERE tagholder = ?");
-        stmt.all([username], function (err, row) {
+        stmt.all([tagholder], function (err, row) {
             if (err) throw err;
             if (row) rows = row;
         });

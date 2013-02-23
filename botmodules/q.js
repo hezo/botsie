@@ -58,8 +58,9 @@ function getquote(username, quotenumber, to, bot) {
                 }
 
                 if (rows.length > quotenumber) {
-                    console.log("Botsie:  " + username + ": " + rows[quotenumber].quote)
-                    if (bot) bot.say(to, username + " [" + quotenumber + "/" + rows.length + "]: " + rows[quotenumber].quote);
+
+                    console.log("Botsie:  " + username + " [" + (quotenumber+1) + "/" + rows.length + "]: " + rows[quotenumber].quote)
+                    if (bot) bot.say(to, username + " [" + (quotenumber+1) + "/" + rows.length + "]: " + rows[quotenumber].quote);
                 }
                 else {
                     if (bot) bot.say(to, "No such quote.");

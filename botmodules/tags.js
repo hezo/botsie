@@ -2,7 +2,7 @@ var sqlite3 = require('sqlite3').verbose();
 var db = new sqlite3.Database('tag.db');
 
 exports.modexec = function (to, bot, modargs) {
-    if (modargs) getTags(modargs, to, bot);
+    if (modargs) getTags(modargs.trim(), to, bot);
     else console.log("Tags called without args");
 }
 

@@ -57,8 +57,8 @@ function getquote(username, quotenumber, to, bot) {
             }
             else if(rows.length > 0 )
             {
-                console.log("Botsie: "+rows[0].quote)
-                if(bot) bot.say(to, rows[0].quote);
+                console.log("Botsie: "+rows[Math.floor(Math.random()*rows.length)].quote);
+                if(bot) bot.say(to, rows[Math.floor(Math.random()*rows.length)].quote);
             }
             else
             {

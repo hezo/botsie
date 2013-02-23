@@ -5,7 +5,7 @@ var db = new sqlite3.Database('tag.db');
 exports.modexec = function (to, bot, modargs) {
     splitparams = modargs.split(" ");
 
-    if (splitparams.length > 2) {
+    if (splitparams.length >= 2) {
         addTag(to, bot, splitparams[0], modargs.substring(splitparams[0].length+1))
     }
 

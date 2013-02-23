@@ -1,72 +1,64 @@
 var request = require("request");
-var xml2js = require('xml2js');
-var parser = new xml2js.Parser();
-var showID, showName, seasons, active, etaDays;
+
+/*
+ 0 Show ID@5410
+ 1 Show Name@Supernatural
+ 2 Show URL@http://www.tvrage.com/Supernatural
+ 3 Premiered@2005
+ 4 Started@Sep/13/2005
+ 5 Ended@
+ 6 Latest Episode@08x15^Man's Best Friend with Benefits^Feb/20/2013
+ 7 Next Episode@08x16^Remember the Titans^Feb/27/2013
+ 8 RFC3339@2013-02-27T21:00:00-5:00
+ 9 GMT+0 NODST@1362013200
+10 Country@USA
+11 Status@Returning Series
+12 Classification@Scripted
+13 Genres@Action | Adventure | Drama | Horror/Supernatural | Sci-Fi
+14 Network@The CW
+15 Airtime@Wednesday at 09:00 pm
+16 Runtime@60
+ */
 
 var error = function(exception) {
 	console.dir(exception);
 };
 
 exports.modexec = function(to, bot, show) {
-	request('http://services.tvrage.com/feeds/search.pp?show='+show, function(error, response, body) {
-		try {
-			parser.parseString(body, function(error, result) {
-				showID = result.Results.show[0].showid;
-				showName = result.Results.show[0].name;
-				seasons = result.Results.show[0].seasons;
-				active = result.Results.show[0].ended;
-				request('http://services.tvrage.com/feeds/full_show_info.php?sid='+showID, function(error, response, body) {
-					try {
-						parser.parseString(body, function(error, result) {
-							var currentTime = new Date();
-							var dayNum = currentTime.getDay();
-							//this info is not to be trusted, should loop episode list and find closest one
-							etaDays = dayNum - dayToNumber(result.Show.airday[0]);
-							if(etaDays == 0) {
-								etaDays = "next episode TODAY";
-							} else {
-								if(etaDays == 1) {
-									etaDays = "next episode in: "+etaDays+" day";
-								} else {
-									etaDays = "next episode in: "+etaDays+" days";
-								}
-							}
-							console.log("Show: "+showName+", "+etaDays);
-							bot.say(to, "Show: "+showName+", "+etaDays);
-						});
-					}  catch(err) {
-						console.log(err);
-						bot.say(to, "Error while fetching show info");
-					}
-				});
-    		});
-		}  catch(err) {
-			console.log(err);
-			bot.say(to, "Error while searchig show");
+	console.log(":: TV MODULE ::");
+	request('http://services.tvrage.com/tools/quickinfo.php?show='+show, function(error, response, body) {
+		if (!error && response.statusCode == 200) {
+			var info = body.split("\n");
+			var showName = info[1].split("@")[1];
+			var episodeInfo = info[7].split("@")[1].split("^");
+			
+			var episodeName = episodeInfo[1];
+			var episodeNumber = episodeInfo[0];
+			var air = Date.parse(episodeInfo[2]);
+			var airDate = new Date(air);
+			var airDateToHuman = airDate.getDate()+"."+(airDate.getMonth()+1)+"."+airDate.getFullYear();
+			var currentTime = new Date();
+			
+			var etaDays = daysBetween(currentTime, airDate);
+			
+			var message = showName+', next episode: '+episodeName+' ('+episodeNumber+') @ '+airDateToHuman+' ('+Math.round(etaDays)+' days)';
+			
+			console.log(message);
+			bot.say(to, message);
+		} else {
+			console.log(error);
+			bot.say(to, "Oh Desperate Housewives is on, again...");
 		}
 	});
 };
 
-var dayToNumber = function(day) {
-	var dayArray = new Array(7);
-	dayArray[0] = "Sunday";
-	dayArray[1] = "Monday";
-	dayArray[2] = "Tuesday";
-	dayArray[3] = "Wednesday";
-	dayArray[4] = "Thursday";
-	dayArray[5] = "Friday";
-	dayArray[6] = "Saturday";
-	return dayArray.indexOf(day);
+var parseDate = function (date) {
+    var result = new Date(date);
+    result.setMinutes(result.getMinutes() - result.getTimezoneOffset());
+    return result;
 }
 
-var numberToDay = function(number) {
-	var dayArray = new Array(7);
-	dayArray[0] = "Sunday";
-	dayArray[1] = "Monday";
-	dayArray[2] = "Tuesday";
-	dayArray[3] = "Wednesday";
-	dayArray[4] = "Thursday";
-	dayArray[5] = "Friday";
-	dayArray[6] = "Saturday";
-	return dayArray[number];
+var daysBetween = function(startDate, endDate) {
+    var millisecondsPerDay = 24 * 60 * 60 * 1000;
+    return (parseDate(endDate) - parseDate(startDate)) / millisecondsPerDay;
 }

@@ -6,9 +6,9 @@ var request = require('request');
  * Only some of these config are used...
  */
 var config = {
-	channels : ["#quhbottest"],
+	channels : ["#finnexus"],
 	server : "irc.quakenet.org",
-	botName : "TESTIBOTTI V2 ROCKET",
+	botName : "Seilori",
 	userName : 'nodebot',
 	realName : 'nodeJS IRC client',
 	port : 6667,

@@ -18,7 +18,7 @@ exports.modexec =  function(to, bot, modargs) {
 function getUrl(type) {
 	
 	var base = "http://api.steampowered.com/IDOTA2Match_570/";
-	
+	var id = "";
 }	
 	
 function requestType(to, bot, params) {

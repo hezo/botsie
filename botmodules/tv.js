@@ -29,19 +29,24 @@ exports.modexec = function(to, bot, show) {
 	request('http://services.tvrage.com/tools/quickinfo.php?show='+show, function(error, response, body) {
 		if (!error && response.statusCode == 200) {
 			var info = body.split("\n");
+			var ended = info[5].split("@")[1];
 			var showName = info[1].split("@")[1];
-			var episodeInfo = info[7].split("@")[1].split("^");
 			
-			var episodeName = episodeInfo[1];
-			var episodeNumber = episodeInfo[0];
-			var air = Date.parse(episodeInfo[2]);
-			var airDate = new Date(air);
-			var airDateToHuman = airDate.getDate()+"."+(airDate.getMonth()+1)+"."+airDate.getFullYear();
-			var currentTime = new Date();
-			
-			var etaDays = daysBetween(currentTime, airDate);
-			
-			var message = showName+', next episode: '+episodeName+' ('+episodeNumber+') @ '+airDateToHuman+' ('+Math.round(etaDays)+' days)';
+			if(ended != "") {
+				var endDate = new Date(Date.parse(ended));
+				var endDateToHuman = endDate.getDate()+"."+(endDate.getMonth()+1)+"."+endDate.getFullYear();
+				var message = showName+', Ended: '+endDateToHuman;
+			} else {
+				var episodeInfo = info[7].split("@")[1].split("^");
+				var episodeName = episodeInfo[1];
+				var episodeNumber = episodeInfo[0];
+				var air = Date.parse(episodeInfo[2]);
+				var airDate = new Date(air);
+				var airDateToHuman = airDate.getDate()+"."+(airDate.getMonth()+1)+"."+airDate.getFullYear();
+				var currentTime = new Date();
+				var etaDays = daysBetween(currentTime, airDate);
+				var message = showName+', next episode: '+episodeName+' ('+episodeNumber+') @ '+airDateToHuman+' ('+etaDays+' days)';
+			}
 			
 			console.log(message);
 			bot.say(to, message);
@@ -60,5 +65,7 @@ var parseDate = function (date) {
 
 var daysBetween = function(startDate, endDate) {
     var millisecondsPerDay = 24 * 60 * 60 * 1000;
-    return (parseDate(endDate) - parseDate(startDate)) / millisecondsPerDay;
+    var days = (parseDate(endDate) - parseDate(startDate)) / millisecondsPerDay;
+    days = Math.round(days) + 1;
+    return days; 
 }

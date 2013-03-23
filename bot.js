@@ -6,9 +6,9 @@ var request = require('request');
  * Only some of these config are used...
  */
 var config = {
-    channels:["#finnexus"],
+    channels:["#quhbottest"],
     server:"irc.quakenet.org",
-    botName:"Botsie",
+    botName:"URLTESTBED",
     userName:'nodebot',
     realName:'nodeJS IRC client',
     port:6667,
@@ -58,6 +58,7 @@ var path = require('path');
 
 var modules = {}
 var commands = "";
+//load modules
 reloadModules();
 
 bot.addListener('message', function (from, to, message) {
@@ -96,6 +97,14 @@ function reloadModules(to) {
             console.log(filename + " : " + path.basename(filename, ".js"));
         }
     });
+
+	//init if module has init() function
+    for(mod in modules) {
+    	if (typeof modules[mod].init === "function") {
+    		console.log("init(): "+mod);
+    		modules[mod].init(bot);
+    	}
+    };
 
     commands = commands.substr(0,commands.length-2);
     if (to) bot.say(to, "Modules reloaded!");

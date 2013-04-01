@@ -1,11 +1,12 @@
 var request = require("request");
-var parseString = require('xml2js').parseString;
+var xml2js = require('xml2js');
+var parser = new xml2js.Parser();
 
-/*var bot = {
+var bot = {
 	say: function(to, message) {
 		console.log(to+": "+message);
 	}
-};*/
+};
 
 
 //Module for finnish weater
@@ -20,25 +21,23 @@ exports.modexec = function(to, bot, place) {
 	weatherUrl += "&place="+place;
 	var message = place+": ";
 	request(weatherUrl, function(error, response, body) {
-	//console.log(body);
 		if (!error && response.statusCode == 200) {
-			parseString(body, function (err, result) {
-			console.log(result);
+			parser.parseString(body, function (err, result) {
 				try {
 					var tempArray = result["wfs:FeatureCollection"]["wfs:member"][0]["omso:PointTimeSeriesObservation"][0]["om:result"][0]["wml2:MeasurementTimeseries"][0]["wml2:point"];
 					var lastTemp = tempArray[tempArray.length-1]["wml2:MeasurementTVP"][0]["wml2:value"][0];
 					
 					var windArray = result["wfs:FeatureCollection"]["wfs:member"][1]["omso:PointTimeSeriesObservation"][0]["om:result"][0]["wml2:MeasurementTimeseries"][0]["wml2:point"];
-					var lastWind = windArray[tempArray.length-1]["wml2:MeasurementTVP"][0]["wml2:value"][0];
+					var lastWind = windArray[windArray.length-1]["wml2:MeasurementTVP"][0]["wml2:value"][0];
 					
 					var airPressureArray = result["wfs:FeatureCollection"]["wfs:member"][9]["omso:PointTimeSeriesObservation"][0]["om:result"][0]["wml2:MeasurementTimeseries"][0]["wml2:point"];
-					var lastAirPressure = airPressureArray[tempArray.length-1]["wml2:MeasurementTVP"][0]["wml2:value"][0];
+					var lastAirPressure = airPressureArray[airPressureArray.length-1]["wml2:MeasurementTVP"][0]["wml2:value"][0];
 					
 					var rainArray = result["wfs:FeatureCollection"]["wfs:member"][7]["omso:PointTimeSeriesObservation"][0]["om:result"][0]["wml2:MeasurementTimeseries"][0]["wml2:point"];
-					var lastRain = rainArray[tempArray.length-1]["wml2:MeasurementTVP"][0]["wml2:value"][0];
+					var lastRain = rainArray[rainArray.length-1]["wml2:MeasurementTVP"][0]["wml2:value"][0];
 					
 					var snowArray = result["wfs:FeatureCollection"]["wfs:member"][8]["omso:PointTimeSeriesObservation"][0]["om:result"][0]["wml2:MeasurementTimeseries"][0]["wml2:point"];
-					var snow = snowArray[tempArray.length-1]["wml2:MeasurementTVP"][0]["wml2:value"][0];
+					var snow = snowArray[snowArray.length-1]["wml2:MeasurementTVP"][0]["wml2:value"][0];
 					
 					if(lastTemp !== 'NaN') {
 						message += lastTemp +"c";
@@ -66,6 +65,8 @@ exports.modexec = function(to, bot, place) {
 				bot.say(to, message);
 				console.log("Weather: %s", message);
 			});
+		} else {
+			console.error(error);
 		}
 	});
 };

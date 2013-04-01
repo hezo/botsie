@@ -1,6 +1,5 @@
 var request = require("request");
 var xml2js = require('xml2js');
-var parser = new xml2js.Parser();
 
 var bot = {
 	say: function(to, message) {
@@ -8,8 +7,7 @@ var bot = {
 	}
 };
 
-
-//Module for finnish weater
+//Module for finnish weather
 //this is public api key for Finnish Meteorological Institute
 var apikey = "b37f3e99-cdb8-4858-b850-bfffea6542f9";
 //www.fmi.fi
@@ -19,10 +17,11 @@ var weatherUrl = 'http://data.fmi.fi/wfs?request=GetFeature&timestep=0&storedque
 exports.modexec = function(to, bot, place) {
 	console.log("Weather for %s", place);
 	weatherUrl += "&place="+place;
-	var message = place+": ";
 	request(weatherUrl, function(error, response, body) {
 		if (!error && response.statusCode == 200) {
+			var parser = new xml2js.Parser();
 			parser.parseString(body, function (err, result) {
+				var message = place+": ";
 				try {
 					var tempArray = result["wfs:FeatureCollection"]["wfs:member"][0]["omso:PointTimeSeriesObservation"][0]["om:result"][0]["wml2:MeasurementTimeseries"][0]["wml2:point"];
 					var lastTemp = tempArray[tempArray.length-1]["wml2:MeasurementTVP"][0]["wml2:value"][0];
@@ -64,6 +63,7 @@ exports.modexec = function(to, bot, place) {
 				}
 				bot.say(to, message);
 				console.log("Weather: %s", message);
+				parser.reset();
 			});
 		} else {
 			console.error(error);

@@ -16,6 +16,7 @@ var store = "fmi::observations::weather::timevaluepair";
 var weatherUrl = 'http://data.fmi.fi/wfs?request=GetFeature&timestep=0&storedquery_id='+store+'&fmi-apikey='+apikey;
 //b37f3e99-cdb8-4858-b850-bfffea6542f9&place=Turku
 exports.modexec = function(to, bot, place) {
+	console.log("Weather for %s", place);
 	weatherUrl += "&place="+place;
 	var message = place+": ";
 	request(weatherUrl, function(error, response, body) {
@@ -35,11 +36,6 @@ exports.modexec = function(to, bot, place) {
 				
 				var snowArray = result["wfs:FeatureCollection"]["wfs:member"][8]["omso:PointTimeSeriesObservation"][0]["om:result"][0]["wml2:MeasurementTimeseries"][0]["wml2:point"];
 				var snow = snowArray[tempArray.length-1]["wml2:MeasurementTVP"][0]["wml2:value"][0];
-
-				console.log(lastAirPressure);
-				console.log(lastRain);
-				console.log(snow);
-				
 				
 				if(lastTemp !== 'NaN') {
 					message += lastTemp +"c";
@@ -62,9 +58,8 @@ exports.modexec = function(to, bot, place) {
 				}
 				
 				bot.say(to, message);
+				console.log("Weather: %s", message);
 			});
 		}
 	});
 };
-
-this.modexec("kanava", bot, "Turku");

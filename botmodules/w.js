@@ -17,8 +17,7 @@ var weatherUrl = 'http://data.fmi.fi/wfs?request=GetFeature&timestep=0&storedque
 //b37f3e99-cdb8-4858-b850-bfffea6542f9&place=Turku
 exports.modexec = function(to, bot, place) {
 	console.log("Weather for %s", place);
-	weatherUrl += "&place="+place;
-	request(weatherUrl, function(error, response, body) {
+	request(weatherUrl+"&place="+place, function(error, response, body) {
 		if (!error && response.statusCode == 200) {
 			var data = xml.parseString(body);
 			var message = place+": ";

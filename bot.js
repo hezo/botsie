@@ -62,6 +62,8 @@ var commands = "";
 reloadModules();
 
 bot.addListener('message', function (from, to, message) {
+	var buffer = new Buffer(message, "UTF-8");
+	message = buffer.toString();
     if (message.substring(0, 1) == "!") {
         splitted = message.split(" ");
         askedmodule = splitted[0].substring(1);

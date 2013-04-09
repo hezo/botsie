@@ -1,5 +1,6 @@
 var request = require("request");
-var xml2js = require('xml2js');
+var xml = require("node-xml-lite");
+var util = require("util");
 
 var bot = {
 	say: function(to, message) {
@@ -19,54 +20,52 @@ exports.modexec = function(to, bot, place) {
 	weatherUrl += "&place="+place;
 	request(weatherUrl, function(error, response, body) {
 		if (!error && response.statusCode == 200) {
-			var parser = new xml2js.Parser();
-			parser.parseString(body, function (err, result) {
-				var message = place+": ";
-				try {
-					var tempArray = result["wfs:FeatureCollection"]["wfs:member"][0]["omso:PointTimeSeriesObservation"][0]["om:result"][0]["wml2:MeasurementTimeseries"][0]["wml2:point"];
-					var lastTemp = tempArray[tempArray.length-1]["wml2:MeasurementTVP"][0]["wml2:value"][0];
-					
-					var windArray = result["wfs:FeatureCollection"]["wfs:member"][1]["omso:PointTimeSeriesObservation"][0]["om:result"][0]["wml2:MeasurementTimeseries"][0]["wml2:point"];
-					var lastWind = windArray[windArray.length-1]["wml2:MeasurementTVP"][0]["wml2:value"][0];
-					
-					var airPressureArray = result["wfs:FeatureCollection"]["wfs:member"][9]["omso:PointTimeSeriesObservation"][0]["om:result"][0]["wml2:MeasurementTimeseries"][0]["wml2:point"];
-					var lastAirPressure = airPressureArray[airPressureArray.length-1]["wml2:MeasurementTVP"][0]["wml2:value"][0];
-					
-					var rainArray = result["wfs:FeatureCollection"]["wfs:member"][7]["omso:PointTimeSeriesObservation"][0]["om:result"][0]["wml2:MeasurementTimeseries"][0]["wml2:point"];
-					var lastRain = rainArray[rainArray.length-1]["wml2:MeasurementTVP"][0]["wml2:value"][0];
-					
-					var snowArray = result["wfs:FeatureCollection"]["wfs:member"][8]["omso:PointTimeSeriesObservation"][0]["om:result"][0]["wml2:MeasurementTimeseries"][0]["wml2:point"];
-					var snow = snowArray[snowArray.length-1]["wml2:MeasurementTVP"][0]["wml2:value"][0];
-					
-					if(lastTemp !== 'NaN') {
-						message += lastTemp +"c";
-					}
-					
-					if(lastWind !== 'NaN') {
-						message += ", Wind: "+lastWind+"m/s";
-					}
-					
-					if(lastAirPressure !== 'NaN') {
-						message += ", Air pressure: "+lastAirPressure+"hPa";
-					}
-					
-					if(lastRain !== 'NaN' && lastRain !== "0.0") {
-						message += ", Rain: "+lastRain+"mm/h";
-					}
-					
-					if(snow !== 'NaN' && snow !== "0.0") {
-						message += ", Snow level: "+snow+"cm";
-					}
-				} catch(err) {
-					console.error(err);
-					message += "No Data";
+			var data = xml.parseString(body);
+			var message = place+": ";
+			try {
+				var tempArray = data.childs[0].childs[0].childs[6].childs[0].childs;
+				var lastTemp = tempArray[tempArray.length-1].childs[0].childs[1].childs[0];
+				
+				var windArray = data.childs[1].childs[0].childs[6].childs[0].childs;
+				var lastWind = windArray[windArray.length-1].childs[0].childs[1].childs[0];
+				
+				var airPressureArray = data.childs[9].childs[0].childs[6].childs[0].childs;
+				var lastAirPressure = airPressureArray[airPressureArray.length-1].childs[0].childs[1].childs[0];
+				
+				var rainArray = data.childs[7].childs[0].childs[6].childs[0].childs;
+				var lastRain = rainArray[rainArray.length-1].childs[0].childs[1].childs[0];
+				
+				var snowArray = data.childs[8].childs[0].childs[6].childs[0].childs;
+				var snow = snowArray[snowArray.length-1].childs[0].childs[1].childs[0];
+				
+				if(lastTemp !== 'NaN') {
+					message += lastTemp +"c";
 				}
-				bot.say(to, message);
-				console.log("Weather: %s", message);
-				parser.reset();
-			});
+				
+				if(lastWind !== 'NaN') {
+					message += ", Wind: "+lastWind+"m/s";
+				}
+				
+				if(lastAirPressure !== 'NaN') {
+					message += ", Pressure: "+lastAirPressure+"hPa";
+				}
+				
+				if(lastRain !== 'NaN' && lastRain !== "0.0") {
+					message += ", Rain: "+lastRain+"mm/h";
+				}
+				
+				if(snow !== 'NaN' && snow !== "0.0") {
+					message += ", Snow level: "+snow+"cm";
+				}
+			} catch(err) {
+				console.error(err);
+				message += "No Data";
+			}
+			bot.say(to, message);
+			console.log("Weather: %s", message);
 		} else {
 			console.error(error);
+			bot.say(to, place+" No Data");
 		}
 	});
 };

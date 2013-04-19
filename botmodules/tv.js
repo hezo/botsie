@@ -20,6 +20,12 @@ var request = require("request");
 16 Runtime@60
  */
 
+var botten = {
+	say: function(to, message) {
+		console.log(to+": "+message);
+	}
+};
+
 var error = function(exception) {
 	console.dir(exception);
 };

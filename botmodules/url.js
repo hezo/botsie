@@ -12,7 +12,7 @@ exports.init =  function(bot) {
 	initContains();
 	bot.addListener('message', function (from, to, message) {
 		var hit = false;
-		if(message.contains('http://')) {
+		if(message.match('https?://') != null) {
 			var url = getUrl(message);
 			for(func in functions) {
 	    		if (url.contains(func)) {
@@ -47,9 +47,9 @@ var general = function(url, bot, to) {
 functions["youtube"] = function(url, bot, to) {
 	console.log("[youtube]: "+url);
 	//http://www.youtube.com/watch?v=2pWZRJd4z8o
-	var matchArray = url.match("http://youtu.be/(.*)");
+	var matchArray = url.match("https?://youtu.be/(.*)");
 	if(matchArray == null) {
-		matchArray = url.match("http://.*?youtube.com/watch\?.*?v=([^&]+)");
+		matchArray = url.match("https?://.*?youtube.com/watch\?.*?v=([^&]+)");
 	}
 	url = "http://gdata.youtube.com/feeds/api/videos/"+matchArray[1]+"?alt=json"
 	request(url, function(error, response, body) {
@@ -76,7 +76,7 @@ functions["youtu.be"] = function(url, bot, to) {
 functions["spotify"] = function(url, bot, to) {
 	var api = false;
 	console.log("[spotify]: "+url);
-	var matchArray = url.match(".*(http:\/\/open.spotify.com\/|spotify:)(album|artist|track)([:\/])([a-zA-Z0-9]+)\/?.*");
+	var matchArray = url.match(".*(https?:\/\/open.spotify.com\/|spotify:)(album|artist|track)([:\/])([a-zA-Z0-9]+)\/?.*");
 	if(matchArray != null) {
 		api = true;
 		url = "http://ws.spotify.com/lookup/1/.json?uri=spotify:"+matchArray[2]+":"+matchArray[4];
@@ -126,7 +126,7 @@ var initContains = function() {
 var getUrl = function(message) {
 	var splitted = message.split(" ");
 	for(index in splitted) {
-		if(splitted[index].contains('http://'))
+		if(splitted[index].contains('http://') || splitted[index].contains('https://'))
 			return splitted[index];
 	}
 }
@@ -139,7 +139,7 @@ var testBed = function(message) {
 	initContains();
 	var hit = false;
 	var to = "testbed";
-	if(message.contains('http://')) {
+	if(message.match('https?://') != null) {
 		var url = getUrl(message);
 		for(func in functions) {
     		if (url.contains(func)) {

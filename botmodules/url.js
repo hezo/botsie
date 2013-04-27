@@ -8,6 +8,9 @@ var botten = {
 		console.log(to+": "+message);
 	}
 };
+exports.modexec = function (to, bot, modargs) {
+    console.log("no rest for the wicked");
+}
 exports.init =  function(bot) {
 	initContains();
 	bot.addListener('message', function (from, to, message) {

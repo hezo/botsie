@@ -1,9 +1,10 @@
-console.log("Piraatti :: Start");
 var irc = require("irc");
 var request = require('request');
+var fs = require("fs");
+var path = require('path');
 
 /*
- * Only some of these config are used...
+ * Only some of these configs are used...
  */
 var config = {
     channels:["#finnexus"],
@@ -25,7 +26,7 @@ var config = {
     channelPrefixes:"&#",
     messageSplit:512
 };
-
+console.log("Bot :: Start");
 var bot = new irc.Client(config.server, config.botName, {
     channels:config.channels,
     userName:'seilori',
@@ -51,10 +52,6 @@ bot.addListener("join", function (channel, who) {
 bot.addListener('error', function (message) {
     console.log('error: ', message);
 });
-
-//Load dem modules.
-var fs = require("fs");
-var path = require('path');
 
 var modules = {}
 var commands = "";

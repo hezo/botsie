@@ -27,6 +27,7 @@
 		"node-xml-lite": "0.0.x",
 		"request": "2.12.x",
 		"sqlite3": "2.1.x",
-		"xml2js": "0.2.x"
+		"xml2js": "0.2.x",
+		"express": "3.x"
 	}
 }

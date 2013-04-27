@@ -31,6 +31,15 @@ exports.init =  function(bot) {
 			to: req.params.to,
 			message: req.params.message,
 		};
+		bot.say('#'+req.params.to, req.params.message);
+		response.json(res, body);
+	});
+
+	app.get('/bot/private/:to/:message', function(req, res){
+		var body = {
+			to: req.params.to,
+			message: req.params.message,
+		};
 		bot.say(req.params.to, req.params.message);
 		response.json(res, body);
 	});
@@ -65,5 +74,3 @@ exports.init =  function(bot) {
 	app.listen(port);
 	console.log('REST service Listening on port '+port);
 }
-
-this.init(botten);

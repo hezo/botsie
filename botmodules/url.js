@@ -132,7 +132,7 @@ var getUrl = function(message) {
 }
 //just trim for now
 var cleanup = function(text) {
-	return text.trim();
+	return text.replace(/(\r\n|\n|\r)/gm,"").trim();
 }
 
 var testBed = function(message) {

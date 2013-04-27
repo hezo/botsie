@@ -40,7 +40,7 @@ exports.init =  function(bot) {
 			channel: req.params.channel,
 			password: req.params.password
 		};
-		bot.join('#'+req.params.channel+' '+req.params.password');
+		bot.join('#'+req.params.channel+' '+req.params.password);
 		response.json(res, body);
 	});
 

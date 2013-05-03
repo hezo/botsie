@@ -1,8 +1,8 @@
 var express = require('express');
 var app = express();
 //what port to bind
-var port = 8081;
-
+var adminPort = 8081;
+var port = 8082;
 var botten = {
 	say: function(to, message) {
 		console.log(to+": "+message);
@@ -18,6 +18,7 @@ var response = {
 
 exports.modexec = function (to, bot, modargs) {
     console.log("no rest for the wicked");
+    bot.say(to, "no rest for the wicked");
 }
 
 exports.init =  function(bot) {
@@ -71,6 +72,6 @@ exports.init =  function(bot) {
 		response.json(res, body);
 	});
 
-	app.listen(port);
-	console.log('REST service Listening on port '+port);
+	app.listen(adminPort);
+	console.log('RESTAdmin listening on: '+adminPort);
 }

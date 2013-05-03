@@ -37,13 +37,13 @@ exports.modexec = function(to, bot, show) {
 			var info = body.split("\n");
 			var ended = info[5].split("@")[1];
 			var showName = info[1].split("@")[1];
-			
 			if(ended != "") {
 				var endDate = new Date(Date.parse(ended));
 				var endDateToHuman = endDate.getDate()+"."+(endDate.getMonth()+1)+"."+endDate.getFullYear();
 				var message = showName+', Ended: '+endDateToHuman;
 			} else {
 				var episodeInfo = info[7].split("@")[1].split("^");
+				var status = info[8].split("@")[1];
 				var episodeName = episodeInfo[1];
 				var episodeNumber = episodeInfo[0];
 				var air = Date.parse(episodeInfo[2]);
@@ -51,7 +51,13 @@ exports.modexec = function(to, bot, show) {
 				var airDateToHuman = airDate.getDate()+"."+(airDate.getMonth()+1)+"."+airDate.getFullYear();
 				var currentTime = new Date();
 				var etaDays = daysBetween(currentTime, airDate);
-				var message = showName+', next episode: '+episodeName+' ('+episodeNumber+') @ '+airDateToHuman+' ('+etaDays+' days)';
+				//for those series that dosent have episode info
+				if(episodeName === undefined) {
+					var message = showName+', status: '+status+', no next episode info!';
+				} else {
+					var message = showName+', next episode: '+episodeName+' ('+episodeNumber+') @ '+airDateToHuman+' ('+etaDays+' days)';
+				}
+				
 			}
 			
 			console.log(message);

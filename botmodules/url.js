@@ -10,7 +10,6 @@ var uri = nconf.get('uri');
 mongoose.connect(uri);
 
 var urlModel = mongo.urlModel;
-
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 
@@ -28,6 +27,7 @@ exports.init =  function(bot) {
 	initContains();
 	bot.addListener('message', function (from, to, message) {
 		var hit = false;
+		console.log(urlModel);
 		if(message.match('https?://') != null) {
 			var url = getUrl(message);
 			for(func in functions) {
@@ -46,6 +46,12 @@ exports.init =  function(bot) {
 	    	//no specific function found
 	    	if(!hit) {
 				general(url, bot, to);
+				var mUrl = new urlModel({ from: from, to:to, url:url});
+	    		mUrl.save(function (err, mUrl) {
+					if (err) {
+						console.log(err);
+					}
+				});
 	    	}
 		}
 	});

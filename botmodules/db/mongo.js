@@ -7,4 +7,4 @@ var urlSchema = mongoose.Schema({
 });
 var urlModel = mongoose.model('urlModel', urlSchema);
 
-exports.urlModel;
+exports.urlModel = urlModel;

@@ -1,6 +1,6 @@
 var nconf = require('nconf');
 var express = require('express');
-nconf.argv().env().file({ file: '../../config/rest.json' });
+nconf.argv().env().file({ file: './config/rest.json' });
 exports.init =  function(app,response, bot) {
 	var auth = express.basicAuth(nconf.get('adminUser'), nconf.get('AdminPass'));
 	

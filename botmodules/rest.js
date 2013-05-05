@@ -4,7 +4,7 @@ var fs = require("fs")
 var path = require('path');
 var nconf = require('nconf');
 var controllers = {};
-nconf.argv().env().file({ file: '../config/rest.json' });
+nconf.argv().env().file({ file: '/config/rest.json' });
 
 var controllerFolder = nconf.get('controllers');
 

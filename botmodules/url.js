@@ -1,5 +1,22 @@
 var request = require("request");
 var cheerio = require('cheerio');
+var express = require('express');
+var mongoose = require('mongoose');
+var nconf = require('nconf');
+
+nconf.argv().env().file({ file: '../config/mongo.json' });
+mongoose.connect(nconf.get('uri'));
+
+var db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
+
+var urlSchema = mongoose.Schema({
+    from: String,
+    to: String,
+    url: String
+});
+
+var urlModel = mongoose.model('urlModel', urlSchema);
 
 var functions = {};
 //for testing
@@ -21,6 +38,12 @@ exports.init =  function(bot) {
 	    		if (url.contains(func)) {
 	    			hit = true;
 	    			functions[func](url, bot, to);
+	    			var mUrl = new urlModel({ from: from, to:to, url:url});
+	    			mUrl.save(function (err, mUrl) {
+						if (err) {
+							console.log(err);
+						}
+					});
 	    			break;
 	    		}
 	    	};
@@ -142,12 +165,19 @@ var testBed = function(message) {
 	initContains();
 	var hit = false;
 	var to = "testbed";
+	var from = "testbed";
 	if(message.match('https?://') != null) {
 		var url = getUrl(message);
 		for(func in functions) {
     		if (url.contains(func)) {
     			hit = true;
     			functions[func](url, botten, to);
+    			var mUrl = new urlModel({ from: from, to:to, url:url});
+				mUrl.save(function (err, mUrl) {
+					if (err) {
+						console.log(err);
+					}
+				});
     			break;
     		}
     	};
@@ -157,3 +187,4 @@ var testBed = function(message) {
     	}
 	}
 }
+testBed("http://www.youtube.com/watch?v=cegdR0GiJl4");

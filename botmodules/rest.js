@@ -1,8 +1,15 @@
 var express = require('express');
 var app = express();
+var fs = require("fs")
+var path = require('path');
+var nconf = require('nconf');
+var controllers = {};
+nconf.argv().env().file({ file: '../config/rest.json' });
+
+var controllerFolder = nconf.get('controllers');
+
 //what port to bind
-var adminPort = 8081;
-var port = 8082;
+var port = nconf.get('port');
 var botten = {
 	say: function(to, message) {
 		console.log(to+": "+message);
@@ -17,7 +24,6 @@ var response = {
 }
 
 exports.modexec = function (to, bot, modargs) {
-    console.log("no rest for the wicked");
     bot.say(to, "no rest for the wicked");
 }
 
@@ -26,52 +32,21 @@ exports.init =  function(bot) {
 	app.get('/', function(req, res) {
 		console.log("root");
 	});
+	console.log(controllerFolder);
+    fs.readdirSync(controllerFolder).forEach(function(filename) {
+        if (path.extname(filename) === ".js") {
+            controllers[path.basename(filename, ".js")] = require(controllerFolder+"/"+filename);
+            console.log("controller: "+filename+" : "+path.basename(filename, ".js"));
+        }
+    });
 
-	app.get('/bot/say/:to/:message', function(req, res){
-		var body = {
-			to: req.params.to,
-			message: req.params.message,
-		};
-		bot.say('#'+req.params.to, req.params.message);
-		response.json(res, body);
-	});
-
-	app.get('/bot/private/:to/:message', function(req, res){
-		var body = {
-			to: req.params.to,
-			message: req.params.message,
-		};
-		bot.say(req.params.to, req.params.message);
-		response.json(res, body);
-	});
-
-	app.get('/bot/join/:channel/:password', function(req, res){
-		var body = {
-			channel: req.params.channel,
-			password: req.params.password
-		};
-		bot.join('#'+req.params.channel+' '+req.params.password);
-		response.json(res, body);
-	});
-
-	app.get('/bot/part/:channel', function(req, res){
-		var body = {
-			channel: req.params.channel
-		};
-		bot.part('#'+req.params.channel);
-		response.json(res, body);
-	});
-
-	app.get('/bot/send/:channel/:operation/:nick', function(req, res){
-		var body = {
-			channel: req.params.channel,
-			operation: req.params.operation,
-			nick: req.params.nick
-		};
-		bot.send('MODE', '#'+req.params.channel, req.params.operation, req.params.nick);
-		response.json(res, body);
-	});
-
-	app.listen(adminPort);
-	console.log('RESTAdmin listening on: '+adminPort);
+	for(controller in controllers) {
+		if (typeof controllers[controller].init === "function") {
+			controllers[controller].init(app,response, bot);
+		}
+	};
+	app.listen(port);
+	console.log('REST listening on: '+port);
 }
+
+this.init(botten);

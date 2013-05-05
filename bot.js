@@ -2,40 +2,19 @@ var irc = require("irc");
 var request = require('request');
 var fs = require("fs");
 var path = require('path');
+var nconf = require('nconf');
+nconf.argv().env().file({ file: './config/bot.json' });
 
-/*
- * Only some of these configs are used...
- */
-var config = {
-    channels:["#finnexus"],
-    server:"irc.quakenet.org",
-    botName:"Botsie",
-    userName:'nodebot',
-    realName:'nodeJS IRC client',
-    port:6667,
-    debug:true,
-    showErrors:false,
-    autoRejoin:true,
-    autoConnect:true,
-    secure:false,
-    selfSigned:false,
-    certExpired:false,
-    floodProtection:false,
-    floodProtectionDelay:1000,
-    stripColors:false,
-    channelPrefixes:"&#",
-    messageSplit:512
-};
 console.log("Bot :: Start");
-var bot = new irc.Client(config.server, config.botName, {
-    channels:config.channels,
-    userName:'seilori',
-    realName:'Pekka Merimies',
-    autoRejoin:true,
-    autoConnect:true,
-    floodProtection:true,
-    floodProtectionDelay:1000,
-    showErrors:true
+var bot = new irc.Client(nconf.get('server'), nconf.get('botName'), {
+    channels:nconf.get('channels'),
+    userName:nconf.get('userName'),
+    realName:nconf.get('realName'),
+    autoRejoin:nconf.get('autoRejoin'),
+    autoConnect:nconf.get('autoConnect'),
+    floodProtection:nconf.get('floodProtection'),
+    floodProtectionDelay:nconf.get('floodProtectionDelay'),
+    showErrors:nconf.get('showErrors')
 });
 
 

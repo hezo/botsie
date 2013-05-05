@@ -1,0 +1,20 @@
+{
+    "channels":["#someChannel"],
+    "server":"someServer.com",
+    "botName":"Node",
+    "userName":'Node',
+    "realName":'Node',
+    "port":6667,
+    "debug":true,
+    "showErrors":false,
+    "autoRejoin":true,
+    "autoConnect":true,
+    "secure":false,
+    "selfSigned":false,
+    "certExpired":false,
+    "floodProtection":true,
+    "floodProtectionDelay":1000,
+    "stripColors":false,
+    "channelPrefixes":"&#",
+    "messageSplit":512
+}

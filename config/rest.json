@@ -1,0 +1,6 @@
+{
+	"port": 8081,
+	"controllers": "./rest",
+	"adminUser": "admin",
+	"adminPass": "admin"
+}

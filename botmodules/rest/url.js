@@ -1,7 +1,7 @@
 var mongoose = require('mongoose');
 var nconf = require('nconf');
 
-nconf.argv().env().file({ file: '.././config/mongo.json' });
+nconf.argv().env().file({ file: '../../config/mongo.json' });
 mongoose.connect(nconf.get('uri'));
 
 var db = mongoose.connection;

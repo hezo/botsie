@@ -6,7 +6,6 @@ var pass = nconf.get('adminPass');
 
 exports.init =  function(app,response, bot) {
 	var auth = express.basicAuth(user,pass);
-	
 	app.get('/bot/', auth, function(req, res){
 		var body = { message: "bot root"};
 		response.json(res, body);

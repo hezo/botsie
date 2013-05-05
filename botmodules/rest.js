@@ -32,12 +32,9 @@ exports.init =  function(bot) {
 	app.get('/', function(req, res) {
 		console.log("root");
 	});
-	console.log(controllerFolder);
     fs.readdirSync(controllerFolderFull).forEach(function(filename) {
         if (path.extname(filename) === ".js") {
-        console.log(path);
             controllers[path.basename(filename, ".js")] = require("./"+controllerFolder+"/"+filename);
-            console.log("controller: "+filename+" : "+path.basename(filename, ".js"));
         }
     });
 
@@ -49,5 +46,3 @@ exports.init =  function(bot) {
 	app.listen(port);
 	console.log('REST listening on: '+port);
 }
-
-this.init(botten);

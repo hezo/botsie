@@ -4,7 +4,9 @@ var fs = require("fs");
 var path = require('path');
 var nconf = require('nconf');
 nconf.argv().env().file({ file: './config/bot.json' });
+
 console.log("Bot :: Start");
+
 var bot = new irc.Client(nconf.get('server'), nconf.get('botName'), {
     channels:nconf.get('channels'),
     userName:nconf.get('userName'),

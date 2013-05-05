@@ -35,9 +35,7 @@ exports.init =  function(bot) {
 	console.log(controllerFolder);
     fs.readdirSync(controllerFolderFull).forEach(function(filename) {
         if (path.extname(filename) === ".js") {
-        console.log(path);
             controllers[path.basename(filename, ".js")] = require("./"+controllerFolder+"/"+filename);
-            console.log("controller: "+filename+" : "+path.basename(filename, ".js"));
         }
     });
 

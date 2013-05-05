@@ -1,8 +1,11 @@
 var nconf = require('nconf');
 var express = require('express');
 nconf.argv().env().file({ file: './config/rest.json' });
+var user = nconf.get('adminUser');
+var pass = nconf.get('AdminPass');
+
 exports.init =  function(app,response, bot) {
-	var auth = express.basicAuth(nconf.get('adminUser'), nconf.get('AdminPass'));
+	var auth = express.basicAuth(user,pass);
 	
 	app.get('/bot/', auth, function(req, res){
 		var body = { message: "bot root"};

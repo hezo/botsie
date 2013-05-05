@@ -4,7 +4,7 @@ var express = require('express');
 var mongoose = require('mongoose');
 var nconf = require('nconf');
 
-nconf.argv().env().file({ file: '../config/mongo.json' });
+nconf.argv().env().file({ file: './config/mongo.json' });
 mongoose.connect(nconf.get('uri'));
 
 var db = mongoose.connection;
@@ -187,4 +187,3 @@ var testBed = function(message) {
     	}
 	}
 }
-testBed("http://www.youtube.com/watch?v=cegdR0GiJl4");

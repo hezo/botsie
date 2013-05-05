@@ -3,8 +3,7 @@ var request = require('request');
 var fs = require("fs");
 var path = require('path');
 var nconf = require('nconf');
-nconf.argv().env().file({ file: '/config/bot.json' });
-
+nconf.argv().env().file({ file: './config/bot.json' });
 console.log("Bot :: Start");
 var bot = new irc.Client(nconf.get('server'), nconf.get('botName'), {
     channels:nconf.get('channels'),
@@ -15,17 +14,6 @@ var bot = new irc.Client(nconf.get('server'), nconf.get('botName'), {
     floodProtection:nconf.get('floodProtection'),
     floodProtectionDelay:nconf.get('floodProtectionDelay'),
     showErrors:nconf.get('showErrors')
-});
-
-
-bot.addListener("join", function (channel, who) {
-    // Welcome them in!
-    if (who == "hezo") {
-        bot.say(channel, who + " ooh its me clown!");
-    }
-    if (who == "Quh") {
-        bot.say(channel, who + ": my master!");
-    }
 });
 
 bot.addListener('error', function (message) {
@@ -68,7 +56,7 @@ function reloadModules(to) {
     modules = {};
     commands = "";
     console.log("Modules loaded:");
-    fs.readdirSync("./botmodules").forEach(function (filename) {
+    fs.readdirSync(nconf.get('modules')).forEach(function (filename) {
         if (filename != 'index.js' && path.extname(filename) == ".js") {
             modules[path.basename(filename, ".js")] = require("./botmodules/" + filename);
             commands += "!" + path.basename(filename, ".js") + ", ";

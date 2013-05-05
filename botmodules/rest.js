@@ -4,10 +4,10 @@ var fs = require("fs")
 var path = require('path');
 var nconf = require('nconf');
 var controllers = {};
-nconf.argv().env().file({ file: '../config/rest.json' });
+nconf.argv().env().file({ file: './config/rest.json' });
 
-var controllerFolder = nconf.get('controllers');
-
+var controllerFolderFull = nconf.get('modFolder')+nconf.get('controllerFolder');
+var controllerFolder = nconf.get('controllerFolder');
 //what port to bind
 var port = nconf.get('port');
 var botten = {
@@ -33,9 +33,10 @@ exports.init =  function(bot) {
 		console.log("root");
 	});
 	console.log(controllerFolder);
-    fs.readdirSync(controllerFolder).forEach(function(filename) {
+    fs.readdirSync(controllerFolderFull).forEach(function(filename) {
         if (path.extname(filename) === ".js") {
-            controllers[path.basename(filename, ".js")] = require(controllerFolder+"/"+filename);
+        console.log(path);
+            controllers[path.basename(filename, ".js")] = require("./"+controllerFolder+"/"+filename);
             console.log("controller: "+filename+" : "+path.basename(filename, ".js"));
         }
     });

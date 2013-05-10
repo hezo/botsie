@@ -27,7 +27,6 @@ exports.init =  function(bot) {
 	initContains();
 	bot.addListener('message', function (from, to, message) {
 		var hit = false;
-		console.log(urlModel);
 		if(message.match('https?://') != null) {
 			var url = getUrl(message);
 			for(func in functions) {

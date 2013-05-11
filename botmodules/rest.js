@@ -6,8 +6,9 @@ var nconf = require('nconf');
 var controllers = {};
 nconf.argv().env().file({ file: './config/rest.json' });
 
-var controllerFolderFull = nconf.get('modFolder')+nconf.get('controllerFolder');
+var controllerFolderFull = nconf.get('modFolder')+''+nconf.get('controllerFolder');
 var controllerFolder = nconf.get('controllerFolder');
+
 //what port to bind
 var port = nconf.get('port');
 var botten = {
@@ -32,6 +33,9 @@ exports.init =  function(bot) {
 	app.get('/', function(req, res) {
 		console.log("root");
 	});
+	
+	app.use('/static', express.static(__dirname + '/rest/public'));
+	
     fs.readdirSync(controllerFolderFull).forEach(function(filename) {
         if (path.extname(filename) === ".js") {
             controllers[path.basename(filename, ".js")] = require("./"+controllerFolder+"/"+filename);
@@ -46,3 +50,5 @@ exports.init =  function(bot) {
 	app.listen(port);
 	console.log('REST listening on: '+port);
 }
+
+this.init(botten);

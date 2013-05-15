@@ -71,7 +71,7 @@ for(config in botConfigs) {
 	
 	        switch (askedmodule) {
 	            case "help":
-	                this.listModules(to);
+	                bot[config].listModules(to);
 	                break;
 	        }
 	

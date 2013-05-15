@@ -1,4 +1,4 @@
-/*var sqlite3 = require('sqlite3').verbose();
+var sqlite3 = require('sqlite3').verbose();
 var db = new sqlite3.Database('tag.db');
 
 
@@ -20,4 +20,4 @@ function addTag(to, bot, tagholder, tag) {
             if (bot) bot.say(to, "Tag added.")
         });
     });
-}*/
+}

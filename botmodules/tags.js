@@ -1,4 +1,4 @@
-/*var sqlite3 = require('sqlite3').verbose();
+var sqlite3 = require('sqlite3').verbose();
 var db = new sqlite3.Database('tag.db');
 
 exports.modexec = function (to, bot, modargs) {
@@ -38,4 +38,4 @@ function getTags(tagholder, to, bot) {
         });
 
     });
-}*/
+}

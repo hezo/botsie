@@ -24,17 +24,13 @@ var response = {
 	}
 }
 
-exports.modexec = function (to, bot, modargs) {
-    bot.say(to, "no rest for the wicked");
-}
-
 exports.init =  function(bot) {
-	console.log("REST init()");
+	console.log("HTTP init()");
 	app.get('/', function(req, res) {
 		console.log("root");
 	});
 	
-	app.use('/static', express.static(__dirname + '/rest/public'));
+	app.use('/static', express.static(__dirname + '/static'));
 	
     fs.readdirSync(controllerFolderFull).forEach(function(filename) {
         if (path.extname(filename) === ".js") {
@@ -44,11 +40,9 @@ exports.init =  function(bot) {
 
 	for(controller in controllers) {
 		if (typeof controllers[controller].init === "function") {
-			controllers[controller].init(app,response, bot);
+			controllers[controller].init(app, response, bot);
 		}
 	};
 	app.listen(port);
-	console.log('REST listening on: '+port);
+	console.log('HTTP listening on: '+port);
 }
-
-this.init(botten);

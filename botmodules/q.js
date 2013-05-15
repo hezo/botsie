@@ -1,4 +1,4 @@
-var sqlite3 = require('sqlite3').verbose();
+/*var sqlite3 = require('sqlite3').verbose();
 var db = new sqlite3.Database('quote.db');
 
 
@@ -73,4 +73,4 @@ function getquote(username, quotenumber, to, bot) {
 
 function isNumber(n) {
     return !isNaN(parseFloat(n)) && isFinite(n);
-}
+}*/

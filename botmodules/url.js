@@ -3,15 +3,14 @@ var cheerio = require('cheerio');
 var express = require('express');
 var mongoose = require('mongoose');
 var nconf = require('nconf');
-var mongo = require('./db/mongo.js');
+require('date-utils');
+var mongo = require('./../db/mongo.js');
 
 nconf.argv().env().file({ file: './config/mongo.json' });
 var uri = nconf.get('uri');
 mongoose.connect(uri);
 
 var urlModel = mongo.urlModel;
-var db = mongoose.connection;
-db.on('error', console.error.bind(console, 'connection error:'));
 
 var functions = {};
 //for testing
@@ -20,9 +19,10 @@ var botten = {
 		console.log(to+": "+message);
 	}
 };
+
 exports.modexec = function (to, bot, modargs) {
-    console.log("no rest for the wicked");
 }
+
 exports.init =  function(bot) {
 	initContains();
 	bot.addListener('message', function (from, to, message) {
@@ -32,8 +32,8 @@ exports.init =  function(bot) {
 			for(func in functions) {
 	    		if (url.contains(func)) {
 	    			hit = true;
-	    			functions[func](url, bot, to);
-	    			var mUrl = new urlModel({ from: from, to:to, url:url});
+	    			functions[func](url, this, to);
+	    			var mUrl = new urlModel({ from: from, to:to, url:url, date: Date.now(), bot: bot.botname});
 	    			mUrl.save(function (err, mUrl) {
 						if (err) {
 							console.log(err);
@@ -44,8 +44,8 @@ exports.init =  function(bot) {
 	    	};
 	    	//no specific function found
 	    	if(!hit) {
-				general(url, bot, to);
-				var mUrl = new urlModel({ from: from, to:to, url:url});
+				general(url, this, to);
+				var mUrl = new urlModel({ from: from, to:to, url:url, date: Date.now(), bot: bot.botname});
 	    		mUrl.save(function (err, mUrl) {
 					if (err) {
 						console.log(err);

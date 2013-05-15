@@ -1,6 +1,6 @@
 {
 	"port": 8081,
-	"modFolder": "./botmodules",
+	"modFolder": "./http",
 	"controllerFolder": "/rest",
 	"adminUser": "admin",
 	"adminPass": "admin"

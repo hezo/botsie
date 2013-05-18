@@ -9,9 +9,11 @@ nconf.argv().env().file({ file: './config/rest.json' });
 var controllerFolderFull = nconf.get('modFolder')+''+nconf.get('controllerFolder');
 var controllerFolder = nconf.get('controllerFolder');
 
+
+
 //what port to bind
 var port = nconf.get('port');
-var botten = {
+var bot = {
 	say: function(to, message) {
 		console.log(to+": "+message);
 	}
@@ -46,3 +48,4 @@ exports.init =  function(bot) {
 	app.listen(port);
 	console.log('HTTP listening on: '+port);
 }
+this.init(bot);

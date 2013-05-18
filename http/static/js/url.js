@@ -3,7 +3,7 @@
 var app = angular.module('url', []).
 	config(function($routeProvider) {
 		$routeProvider.
-			when('/', {controller:MainCtrl, templateUrl:'list.html'}).
+			when('/', {controller:MainCtrl, templateUrl:'views/list.html'}).
 			otherwise({redirectTo:'/'});
 	});
 	function MainCtrl($scope, $http) {

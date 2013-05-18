@@ -1,6 +1,8 @@
 var request = require("request");
 var xml = require("node-xml-lite");
 var util = require("util");
+var nconf = require('nconf');
+nconf.argv().env().file({ file: './config/modules.json' });
 
 var bot = {
 	say: function(to, message) {
@@ -9,8 +11,7 @@ var bot = {
 };
 
 //Module for finnish weather
-//this is public api key for Finnish Meteorological Institute
-var apikey = "b37f3e99-cdb8-4858-b850-bfffea6542f9";
+var apikey = nconf.get('fmiApikey');
 //www.fmi.fi
 var store = "fmi::observations::weather::timevaluepair";
 var weatherUrl = 'http://data.fmi.fi/wfs?request=GetFeature&timestep=0&storedquery_id='+store+'&fmi-apikey='+apikey;

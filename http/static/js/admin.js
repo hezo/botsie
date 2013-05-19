@@ -32,7 +32,7 @@ function MainCtrl($scope, $http) {
 		$http.get('/bot/').success(function(data, status) {
 			if (status < 200 || status >= 300)
 				return;
-		$scope.login.user = data;
+		$scope.login.user = "admin";
 		});
    	};
     $scope.login.disconnect = function() {

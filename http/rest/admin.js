@@ -3,11 +3,25 @@ var express = require('express');
 nconf.argv().env().file({ file: './config/rest.json' });
 var user = nconf.get('adminUser');
 var pass = nconf.get('adminPass');
+var auth = express.basicAuth(user,pass);
 
 exports.init =  function(app, response, bot) {
-	var auth = express.basicAuth(user,pass);
+
 	app.get('/bot/', auth, function(req, res){
 		var body = { message: "bot root"};
+		response.json(res, body);
+	});
+	
+	app.get('/bot/net', auth, function(req, res){
+		var botnames = new Array();
+		var i = 0;
+		for(botname in bot) {
+			botnames[i]=botname;
+			i++;
+		}
+		var body = {
+			bots: botnames
+		}
 		response.json(res, body);
 	});
 	

@@ -48,4 +48,3 @@ exports.init =  function(bot) {
 	app.listen(port);
 	console.log('HTTP listening on: '+port);
 }
-this.init(bot);

@@ -1,6 +1,21 @@
-var sqlite3 = require('sqlite3').verbose();
-var db = new sqlite3.Database('quote.db');
+var mongoose = require('mongoose');
+var nconf = require('nconf');
+require('date-utils');
+var mongo = require('./../db/mongo.js');
 
+nconf.argv().env().file({ file: './config/mongo.json' });
+var uri = nconf.get('uri');
+mongoose.connect(uri);
+
+var quoteModel = mongo.quoteModel;
+var quotesModel = mongo.quotesModel;
+//for testing
+var bot = {
+	say: function(to, message) {
+		console.log(to+": "+message);
+	},
+	botname: "testbed"
+};
 
 exports.modexec = function (to, bot, params) {
     splitparams = params.split(" ");
@@ -23,53 +38,49 @@ exports.modexec = function (to, bot, params) {
 
 };
 
-function addquote(username, quote, to, bot) {
-    db.serialize(function () {
-        var stmt = db.prepare("INSERT INTO quotes VALUES (?, ?)");
-        stmt.run([username, quote]);
-        stmt.finalize(function () {
-            console.log("Quote added.");
-            if (bot) bot.say(to, "Quote added.")
-        });
-    });
-
+var addquote = function(username, text, to, bot) {
+	quoteModel.findOne({'user': username}, function (err, quote) {
+		if(err) {
+			console.log(err);
+			return
+		}
+		if(quote) {
+			quote.quotes.push(new quotesModel({ quote: text}));
+			quote.update({$set : {quotes: quote.quotes}}, function (err, quote) {
+				if(err) {
+					console.log(err);
+					if (bot) bot.say(to, "Quote not added.");
+					return;
+				}
+				console.log("Quote updated.");
+				if (bot) bot.say(to, "Quote added.");
+			});
+		} else {
+			//add new quote
+			quotes = new quotesModel({ quote: text});
+			quote = new quoteModel({ user: username, quotes:[quotes], date: Date.now(), bot: bot.botname});
+			quote.save(function (err, quote) {
+				if (err) {
+					console.log(err);
+				}
+				console.log("Quote created.");
+				if (bot) bot.say(to, "Quote added.");
+			});
+		}
+	});
 }
 
-function getquote(username, quotenumber, to, bot) {
-    var rows = [];
-    db.serialize(function () {
-        var stmt = db.prepare("SELECT quote FROM quotes WHERE user = ?");
-        stmt.all([username], function (err, row) {
-            if (err) throw err;
-            if (row) rows = row;
-        });
-
-        stmt.finalize(function () {
-            if (rows.length === 0) {
-                console.log("Botsie:  " + username + ": No quotes");
-                if (bot) bot.say(to, "No quotes for " + username);
-            }
-            else {
-                if (!quotenumber) {
-                    quotenumber = Math.floor(Math.random() * rows.length);
-                }
-                else if (quotenumber < 0) {
-                    quotenumber = (rows.length + quotenumber) >= 0 ? (rows.length + quotenumber) : Infinity;
-                }
-
-                if (rows.length > quotenumber) {
-
-                    console.log("Botsie:  " + username + " [" + (quotenumber+1) + "/" + rows.length + "]: " + rows[quotenumber].quote)
-                    if (bot) bot.say(to, username + " [" + (quotenumber+1) + "/" + rows.length + "]: " + rows[quotenumber].quote);
-                }
-                else {
-                    if (bot) bot.say(to, "No such quote.");
-                    console.log("Botsie:  " + username + ": No such quote.")
-                }
-            }
-        });
-    });
-}
+var getquote = function(username, quotenumber, to, bot) {
+	quoteModel.findOne({'user': username}, function (err, quote) {
+		if(!quote) {
+			console.log(username + ": No quotes");
+			if (bot) bot.say(to, "No quotes for " + username);
+			return;
+		}
+		console.log("Botsie:  " + username + " [" + (quotenumber) + "/" + quote.quotes.length + "]: " + quote.quotes[quotenumber-1].quote)
+		if (bot) bot.say(to, username + " [" + (quotenumber) + "/" + quote.quotes.length + "]: " + quote.quotes[quotenumber-1].quote);
+	});
+};
 
 function isNumber(n) {
     return !isNaN(parseFloat(n)) && isFinite(n);

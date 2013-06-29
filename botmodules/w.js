@@ -25,6 +25,8 @@ exports.modexec = function(to, bot, place) {
 			var data = xml.parseString(body);
 			var message = place+": ";
 			
+			
+			
 			try {
 				// C
 				var tempArray = data.childs[0].childs[0].childs[6].childs[0].childs;
@@ -67,7 +69,7 @@ exports.modexec = function(to, bot, place) {
 				var lastAirPressure = airPressureArray[airPressureArray.length-1].childs[0].childs[1].childs[0];
 
 				//Horizontal visibility m
-				var visibilityArray = data.childs[10].childs[0].childs[6].childs[0].childs;
+				var visibilityArray = data.childs[9].childs[0].childs[6].childs[0].childs;
 				var lastVisibility = visibilityArray[visibilityArray.length-1].childs[0].childs[1].childs[0];
 
 				

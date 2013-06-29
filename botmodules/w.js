@@ -38,15 +38,15 @@ exports.modexec = function(to, bot, place) {
 
 				// m/s
 				var windGustArray = data.childs[2].childs[0].childs[6].childs[0].childs;
-				var lastGust = windGustArray[windArray.length-1].childs[0].childs[1].childs[0];
+				var lastGust = windGustArray[windGustArray.length-1].childs[0].childs[1].childs[0];
 
 				//in degrees
 				var windDirectionArray = data.childs[3].childs[0].childs[6].childs[0].childs;
-				var lastDirection = windDirectionArray[windArray.length-1].childs[0].childs[1].childs[0];
+				var lastDirection = windDirectionArray[windDirectionArray.length-1].childs[0].childs[1].childs[0];
 
 				//in %
 				var humidityArray = data.childs[3].childs[0].childs[6].childs[0].childs;
-				var lastHumidity = humidityArray[windArray.length-1].childs[0].childs[1].childs[0];				
+				var lastHumidity = humidityArray[humidityArray.length-1].childs[0].childs[1].childs[0];				
 
 				//in C , kastepiste
 				var dewPointArray = data.childs[4].childs[0].childs[6].childs[0].childs;
@@ -70,7 +70,7 @@ exports.modexec = function(to, bot, place) {
 
 				//Horizontal visibility m
 				var visibilityArray = data.childs[9].childs[0].childs[6].childs[0].childs;
-				var lastVisibility = visibilityArray[airPressureArray.length-1].childs[0].childs[1].childs[0];
+				var lastVisibility = visibilityArray[visibilityArray.length-1].childs[0].childs[1].childs[0];
 
 				
 				if(lastTemp !== 'NaN') {

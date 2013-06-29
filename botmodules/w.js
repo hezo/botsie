@@ -2,7 +2,7 @@ var request = require("request");
 var xml = require("node-xml-lite");
 var util = require("util");
 var nconf = require('nconf');
-nconf.argv().env().file({ file: '../config/modules.json' });
+nconf.argv().env().file({ file: './config/modules.json' });
 
 var bot = {
 	say: function(to, message) {

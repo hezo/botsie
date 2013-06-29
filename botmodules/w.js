@@ -10,6 +10,8 @@ var bot = {
 	}
 };
 
+
+
 //Module for finnish weather
 var apikey = nconf.get('fmiApikey');
 //www.fmi.fi
@@ -20,50 +22,52 @@ exports.modexec = function(to, bot, place) {
 	console.log("Weather for %s", place);
 	request(weatherUrl+"&place="+place, function(error, response, body) {
 		if (!error && response.statusCode == 200) {
-			console.log(body);
 			var data = xml.parseString(body);
 			var message = place+": ";
+			
+			
+			
 			try {
 				// C
 				var tempArray = data.childs[0].childs[0].childs[6].childs[0].childs;
 				var lastTemp = tempArray[tempArray.length-1].childs[0].childs[1].childs[0];
-				
+
 				// m/s
 				var windArray = data.childs[1].childs[0].childs[6].childs[0].childs;
 				var lastWind = windArray[windArray.length-1].childs[0].childs[1].childs[0];
-				
+
 				// m/s
 				var windGustArray = data.childs[2].childs[0].childs[6].childs[0].childs;
 				var lastGust = windGustArray[windArray.length-1].childs[0].childs[1].childs[0];
-				
+
 				//in degrees
 				var windDirectionArray = data.childs[3].childs[0].childs[6].childs[0].childs;
 				var lastDirection = windDirectionArray[windArray.length-1].childs[0].childs[1].childs[0];
-				
+
 				//in %
 				var humidityArray = data.childs[3].childs[0].childs[6].childs[0].childs;
 				var lastHumidity = humidityArray[windArray.length-1].childs[0].childs[1].childs[0];				
-				
+
 				//in C , kastepiste
 				var dewPointArray = data.childs[4].childs[0].childs[6].childs[0].childs;
 				var lastDewPoint = dewPointArray[windArray.length-1].childs[0].childs[1].childs[0];					
-				
+
 				// mm
 				var rainInAreaArray = data.childs[6].childs[0].childs[6].childs[0].childs;
-				var lastRainInArea = rainInAreaArray[rainArray.length-1].childs[0].childs[1].childs[0];
-				
+				var lastRainInArea = rainInAreaArray[rainInAreaArray.length-1].childs[0].childs[1].childs[0];
+
 				// mm/h
 				var rainArray = data.childs[7].childs[0].childs[6].childs[0].childs;
 				var lastRain = rainArray[rainArray.length-1].childs[0].childs[1].childs[0];
-				
+
 				//snow cover cm
 				var snowArray = data.childs[8].childs[0].childs[6].childs[0].childs;
 				var snow = snowArray[snowArray.length-1].childs[0].childs[1].childs[0];		
-						
+	
 				//air pressure hPa
 				var airPressureArray = data.childs[9].childs[0].childs[6].childs[0].childs;
 				var lastAirPressure = airPressureArray[airPressureArray.length-1].childs[0].childs[1].childs[0];
-				
+
 				//Horizontal visibility m
 				var visibilityArray = data.childs[9].childs[0].childs[6].childs[0].childs;
 				var lastVisibility = visibilityArray[airPressureArray.length-1].childs[0].childs[1].childs[0];
@@ -105,4 +109,3 @@ exports.modexec = function(to, bot, place) {
 		}
 	});
 };
-this.modexec("test:", bot, "Turku");

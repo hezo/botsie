@@ -4,8 +4,14 @@
 
 .urlItem {
 	display: block;
-	height: 30px;
+	height: 50px;
 	padding: 2px;
+	text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.08);
+	box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
+	width: 90%;
+	margin-bottom: 10px;
+	border: thin;
+	border-style:solid;
 }
 
 .urlItem:before {
@@ -13,23 +19,15 @@
 	content: "";
 	display: block;
 	width: 20px;
-	height: 30px;
+	height: 50px;
 	float: left;
 	background-color: black;
 }
 
 .listHeader {
-	box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
 	padding-bottom: 5px;
 	padding-top: 5px;
-	text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.08);
-	text-transform: uppercase;
-	transition-delay: 0s;
-	transition-duration: 500ms;
-	transition-property: all;
-	transition-timing-function: ease-in-out;
 	margin-left: 22px;
-	width: 90%;
 	overflow-x: hidden;
     overflow-y: hidden;
     text-overflow: ellipsis;
@@ -37,8 +35,7 @@
     padding-left: 5px;
 }
 
-.listHeader,a {
-	color: #FFFFFF;
+.listHeader, a {
 	font-family: "proxima-nova", sans-serif;
 	font-size: 1.0em;
 	font-style: normal;
@@ -56,8 +53,55 @@
 	background-position: 0 0;
 	background-repeat: repeat;
 	background-size: auto auto;
+	color: #FFFFFF;
 }
 
-.listHeader span {
-	color: #F2F2F2;
+.listHeader.darkblue {
+	background-attachment: scroll;
+	background-clip: border-box;
+	background-color: #0A475E;
+	background-image: none;
+	background-origin: padding-box;
+	background-position: 0 0;
+	background-repeat: repeat;
+	background-size: auto auto;
+	color: #FFFFFF;
+}
+
+.listHeader.white {
+	background-attachment: scroll;
+	background-clip: border-box;
+	background-color: #FFFFFF;
+	background-image: none;
+	background-origin: padding-box;
+	background-position: 0 0;
+	background-repeat: repeat;
+	background-size: auto auto;
+	color: #606060;
+}
+
+.info {
+	background-attachment: scroll;
+	background-clip: border-box;
+	background-color: #E8E8E8;
+	background-image: none;
+	background-origin: padding-box;
+	background-position: 0 0;
+	background-repeat: repeat;
+	background-size: auto auto;
+	color: #606060;
+	overflow-x: hidden;
+    overflow-y: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    padding-left: 5px;
+}
+
+#urlSearchInput {
+	padding: 2px;
+	text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.08);
+	box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
+	width: 50%;
+	margin-bottom: 10px;
+	margin-left: 65px;
 }

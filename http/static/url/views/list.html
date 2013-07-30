@@ -1,10 +1,15 @@
+<div>
+	Search: <input id="urlSearchInput" type="text" ng-model="search.$"/>
+</div>
 <ul class="urlList">
-	<li class="urlItem" ng-repeat="url in urls">
-		<div class="listHeader blue">
-			{{url.from}}: <span>{{url.to}}</span>
-			<a href="{{url.url}}">
+	<li class="urlItem" ng-repeat="url in urls | filter:search">
+		<div class="listHeader white">
+			<a href="{{url.url}}" title="{{url.url}}">
 				{{url.url}} 
 			</a>
+		</div>
+		<div class="info">
+			 <span title="{{url.from}}">{{url.from}}:</span> <span title="{{url.to}}">{{url.to}}</span>
 		</div>
 		<div class="urlElement">
 		</div>

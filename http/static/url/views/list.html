@@ -1,7 +1,9 @@
-<div>
-	Search: <input id="urlSearchInput" type="text" ng-model="search.$"/>
-</div>
-<ul class="urlList">
+<form role="form">
+	<div class="form-group">
+		<input type="text" ng-model="search.$" class="form-control input-sm" id="filterInput" placeholder="Search">
+	</div>
+</form>
+<!-- <ul class="urlList">
 	<li class="urlItem" ng-repeat="url in urls | filter:search">
 		<div class="listHeader white">
 			<a href="{{url.url}}" title="{{url.url}}">
@@ -14,4 +16,20 @@
 		<div class="urlElement">
 		</div>
 	</li>
-</ul>
+</ul>  -->
+<div class="table-responsive">
+	<table class="table table-striped table-condensed">
+		<thead>
+			<th class="hidden-xs">Who</th>
+			<th class="hidden-xs">Where</th>
+			<th>What</th>
+		</thead>
+		<tbody>
+			<tr ng-repeat="url in urls | filter:search">
+				<td class="hidden-xs">{{url.from}}</td>
+				<td class="hidden-xs">{{url.to}}</td>
+				<td><a href="{{url.url}}" target="_blank" title="{{url.url}}">{{url.url}} </a></td>
+			</tr>
+		</tbody>
+	</table>
+</div>

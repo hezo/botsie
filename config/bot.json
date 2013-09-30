@@ -41,5 +41,6 @@
 		    "messageSplit":512
 		}
 	},
-    "modules": "./botmodules"
+    "modules": "./botmodules",
+    "mode": ""
 }

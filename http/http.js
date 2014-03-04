@@ -29,7 +29,7 @@ var response = {
 exports.init =  function(bot) {
 	console.log("HTTP init()");
 	app.get('/', function(req, res) {
-		console.log("root");
+		res.redirect('/static/');
 	});
 	
 	app.use('/static', express.static(__dirname + '/static'));

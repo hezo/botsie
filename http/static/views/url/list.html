@@ -26,10 +26,14 @@
 				<tr ng-repeat="url in urls | filter:search | orderBy:'date':true">
 					<td class="hidden-xs">{{url.from}}</td>
 					<td class="hidden-xs">{{url.to}}</td>
-					<td><a href="{{url.url}}" target="_blank" title="{{url.url}}">{{url.url}}
-					</a></td>
+					<td>
+						<a href="{{url.url}}" target="_blank" title="{{url.url}}">{{url.url}}</a>
+					</td>
 				</tr>
 			</tbody>
 		</table>
+		<div class="progress progress-striped active" data-ng-show="urls == ''">
+			<div class="progress-bar" data-role="progressbar" data-aria-valuenow="100" data-aria-valuemin="0" data-aria-valuemax="100" style="width: 100%"> </div>
+		</div>
 	</div>
 </div>
